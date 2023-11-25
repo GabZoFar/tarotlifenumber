@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Path Number and Tarot Card</title>
+    <title>Language Switcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -16,15 +16,37 @@
             padding: 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
+        .flag-icon {
+            font-size: 1.5em;
+            line-height: 1em;
+            vertical-align: middle;
+        }
+        .language-select-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .language-select-wrapper select {
+            flex-grow: 1;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
     <div class="min-h-screen flex items-center justify-center">
-        <div class="card w-full max-w-md mx-auto">
-            <h1 class="text-xl font-semibold mb-4">Connaître mon numéro de vie et ma carte de tarot</h1>
+        <div class="card w-full max-w-lg mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-xl font-semibold" id="title">Know My Life Path Number and Tarot Card</h1>
+                <div class="language-select-wrapper">
+                    <label for="languageSelect" class="sr-only">Select Language</label>
+                    <select id="languageSelect" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="en">🇬🇧 EN</option>
+                        <option value="fr">🇫🇷 FR</option>
+                    </select>
+                </div>
+            </div>
             <form id="lifePathForm">
                 <div class="mb-4">
-                    <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1">Quelle est votre date de naissance ?</label>
+                    <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1" id="birthdateLabel">What is your birthdate?</label>
                     <input type="date" id="birthdate" name="birthdate" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
                 </div>
                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -32,36 +54,72 @@
                 </button>
             </form>
             <div id="result" class="mt-4"></div>
+            <p class="text-xs text-gray-500 mt-4">Source: tarot de marseille camoin jodorowsky</p>
         </div>
     </div>
 
     <script>
-        const tarotCards = [
-            "Le Bateleur", "La Papesse", "L'Impératrice", "L'Empereur", "Le Pape",
-            "L'Amoureux", "Le Chariot", "La Justice", "L'Hermite", "La Roue de Fortune",
-            "La Force", "Le Pendu", "La Mort", "Tempérance", "Le Diable",
-            "La Maison Dieu", "L'Étoile", "La Lune", "Le Soleil", "Le Jugement",
-            "Le Monde", "Le Mat"
-        ];
+        const translations = {
+            en: {
+                title: "Know My Life Path Number and Tarot Card",
+                birthdateLabel: "What is your birthdate?",
+                resultLifePath: "Your life path number is",
+                resultTarotCard: "Your tarot card is"
+            },
+            fr: {
+                title: "Connaître mon numéro de vie et ma carte de tarot",
+                birthdateLabel: "Quelle est votre date de naissance ?",
+                resultLifePath: "Votre numéro de vie est le",
+                resultTarotCard: "Votre carte de tarot est"
+            }
+        };
+
+        const languageSelect = document.getElementById('languageSelect');
+        const formTitle = document.getElementById('title');
+        const birthdateLabel = document.getElementById('birthdateLabel');
+        const resultElement = document.getElementById('result');
+
+        languageSelect.addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            document.documentElement.lang = selectedLanguage;
+            formTitle.textContent = translations[selectedLanguage].title;
+            birthdateLabel.textContent = translations[selectedLanguage].birthdateLabel;
+            updateResultText(selectedLanguage);
+        });
 
         document.getElementById('lifePathForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const birthdate = document.getElementById('birthdate').value;
-            const lifePathNumber = calculateLifePathNumber(birthdate);
-            const tarotCard = tarotCards[lifePathNumber - 1];
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = `
-                <p class="text-sm text-gray-600">Votre numéro de vie est le <span class="font-semibold">${lifePathNumber}</span>.</p>
-                <p class="text-sm text-gray-600">Votre carte de tarot est <span class="font-semibold">${tarotCard}</span>.</p>
-            `;
+            updateResultText(document.documentElement.lang);
         });
+
+        function updateResultText(language) {
+            const birthdate = document.getElementById('birthdate').value;
+            if (birthdate) {
+                const lifePathNumber = calculateLifePathNumber(birthdate);
+                const tarotCard = tarotCards[lifePathNumber - 1];
+                resultElement.innerHTML = `
+                    <p class="text-sm text-gray-600">${translations[language].resultLifePath} <span class="font-semibold">${lifePathNumber}</span>.</p>
+                    <p class="text-sm text-gray-600">${translations[language].resultTarotCard} <span class="font-semibold">${tarotCard}</span>.</p>
+                `;
+            }
+        }
 
         function calculateLifePathNumber(birthdate) {
             const nums = birthdate.split('-').join('');
-            return nums.split('').reduce((acc, curr) => {
-                return (acc + parseInt(curr)) % 9 || 9;
-            }, 0);
+            let sum = nums.split('').reduce((acc, curr) => acc + parseInt(curr), 0);
+            while (sum > 22) {
+                sum = sum.toString().split('').reduce((acc, curr) => acc + parseInt(curr), 0);
+            }
+            return sum;
         }
+
+        const tarotCards = [
+            "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant",
+            "The Lovers", "The Chariot", "Justice", "The Hermit", "Wheel of Fortune",
+            "Strength", "The Hanged Man", "Death", "Temperance", "The Devil",
+            "The Tower", "The Star", "The Moon", "The Sun", "Judgement",
+            "The World", "The Fool"
+        ];
     </script>
 </body>
 </html>
