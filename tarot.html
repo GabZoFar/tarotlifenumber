@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Switcher</title>
+    <title>Life Number & Tarot Card</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -60,19 +60,33 @@
 
     <script>
         const translations = {
-            en: {
-                title: "Know My Life Path Number and Tarot Card",
-                birthdateLabel: "What is your birthdate?",
-                resultLifePath: "Your life path number is",
-                resultTarotCard: "Your tarot card is"
-            },
-            fr: {
-                title: "Connaître mon numéro de vie et ma carte de tarot",
-                birthdateLabel: "Quelle est votre date de naissance ?",
-                resultLifePath: "Votre numéro de vie est le",
-                resultTarotCard: "Votre carte de tarot est"
-            }
-        };
+    en: {
+        title: "Know My Life Path Number and Tarot Card",
+        birthdateLabel: "What is your birthdate?",
+        resultLifePath: "Your life path number is",
+        resultTarotCard: "Your tarot card is",
+        tarotCards: [
+            "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant",
+            "The Lovers", "The Chariot", "Justice", "The Hermit", "Wheel of Fortune",
+            "Strength", "The Hanged Man", "Death", "Temperance", "The Devil",
+            "The Tower", "The Star", "The Moon", "The Sun", "Judgement",
+            "The World", "The Fool"
+        ]
+    },
+    fr: {
+        title: "Connaître mon numéro de vie et ma carte de tarot",
+        birthdateLabel: "Quelle est votre date de naissance ?",
+        resultLifePath: "Votre numéro de vie est le",
+        resultTarotCard: "Votre carte de tarot est",
+        tarotCards: [
+            "Le Bateleur", "La Papesse", "L'Impératrice", "L'Empereur", "Le Pape",
+            "L'Amoureux", "Le Chariot", "La Justice", "L'Hermite", "La Roue de Fortune",
+            "La Force", "Le Pendu", "La Mort", "Tempérance", "Le Diable",
+            "La Maison Dieu", "L'Étoile", "La Lune", "Le Soleil", "Le Jugement",
+            "Le Monde", "Le Mat"
+        ]
+    }
+};
 
         const languageSelect = document.getElementById('languageSelect');
         const formTitle = document.getElementById('title');
@@ -112,14 +126,6 @@
             }
             return sum;
         }
-
-        const tarotCards = [
-            "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant",
-            "The Lovers", "The Chariot", "Justice", "The Hermit", "Wheel of Fortune",
-            "Strength", "The Hanged Man", "Death", "Temperance", "The Devil",
-            "The Tower", "The Star", "The Moon", "The Sun", "Judgement",
-            "The World", "The Fool"
-        ];
     </script>
 </body>
 </html>
