@@ -1,0 +1,9 @@
+name = "cardsworker"
+main = "index.js"
+account_id = "082c8cdda68c72e0d23cbcbabb97fdab"
+workers_dev = true
+compatibility_date = "2023-11-27"
+
+kv_namespaces = [
+  { binding = "TAROT_CARDS", id = "83b76de7752846d198a4db006ef3427f" }
+]
